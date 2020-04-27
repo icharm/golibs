@@ -43,7 +43,7 @@ import (
 	"unsafe"
 )
 
-type Config struct {
+type DbConfig struct {
 	UserName string
 	Password string
 	Host     string
@@ -57,7 +57,7 @@ var logger = new(Logger)
 var DB *sql.DB
 
 // 方法名大写 == public
-func InitDB(c *Config) {
+func InitDB(c *DbConfig) {
 	logger.INFO("starting to connect to db server...")
 	// 构建连接字符串
 	path := strings.Join(
@@ -170,13 +170,9 @@ func (q *QueryBuilder) Select(st interface{}) *QueryBuilder {
 	q.tableName = name
 	return q
 }
-
-func (q *QueryBuilder) LeftRound() *QueryBuilder {
-	q.where = q.where + " ( "
-	return q
-}
-func (q *QueryBuilder) RightRound() *QueryBuilder {
-	q.where = q.where + " ) "
+func (q *QueryBuilder) Sql(sql string, values ...interface{}) *QueryBuilder {
+	q.where = q.where + sql
+	q.values = append(q.values, values...)
 	return q
 }
 func (q *QueryBuilder) Where(name string, value interface{}) *QueryBuilder {
