@@ -264,6 +264,9 @@ func buildInsertSql(st interface{}) (string, []interface{}, error) {
 	fieldNum := t.NumField()
 	// 反射获取值的集合
 	v := reflect.ValueOf(st)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
 
 	for i := 0; i < fieldNum; i++ {
 		name, _ := firstCharToLower(t.Field(i).Name)
@@ -332,6 +335,9 @@ func buildDeleteSql(st interface{}) (string, []interface{}, error) {
 	fieldNum := t.NumField()
 	// 反射获取值的集合
 	v := reflect.ValueOf(st)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
 
 	for i := 0; i < fieldNum; i++ {
 		name, _ := firstCharToLower(t.Field(i).Name)
