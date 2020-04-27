@@ -250,10 +250,10 @@ func getFieldsArray(q interface{}) []interface{} {
 // Build insert sql string
 func buildInsertSql(st interface{}) (string, []interface{}, error) {
 	t := reflect.TypeOf(st)
-	table, _ := firstCharToLower(t.Name())
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
+	table, _ := firstCharToLower(t.Name())
 	if t.Kind() != reflect.Struct {
 		//logger.ERROR("Param type is not Struct")
 		return "", nil, errors.New("param type is not Struct")
@@ -322,10 +322,10 @@ func buildUpdateSql(st interface{}) (string, []interface{}, error) {
 // 构建删除语句
 func buildDeleteSql(st interface{}) (string, []interface{}, error) {
 	t := reflect.TypeOf(st)
-	table, _ := firstCharToLower(t.Name())
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
+	table, _ := firstCharToLower(t.Name())
 	if t.Kind() != reflect.Struct {
 		//logger.ERROR("Param type is not Struct")
 		return "", nil, errors.New("param type is not Struct")
