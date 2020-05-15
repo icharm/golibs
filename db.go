@@ -364,25 +364,17 @@ func (result SqlExecErrorResult) RowsAffected() (int64, error) {
 
 // 执行sql语句
 func sqlExec(sqlStr string, values []interface{}) (sql.Result, error) {
-	// 开启事务
-	tx, err := DB.Begin()
-	if err != nil {
-		//logger.ERROR("Open database transaction failed, error: %v", err.Error())
-		return SqlExecErrorResult(-1), errors.New(fmt.Sprintf("open database transaction failed, error: %v", err.Error()))
-	}
-	// sql预编译
-	stmt, err := tx.Prepare(sqlStr)
+	stmt, err := DB.Prepare(sqlStr)
 	if err != nil {
 		//logger.ERROR("Sql Prepare failed, error: %v", err.Error())
 		return SqlExecErrorResult(-1), errors.New(fmt.Sprintf("sql Prepare failed, error: %v", err.Error()))
 	}
 	res, err := stmt.Exec(values...)
 	if err != nil {
+		//stmt.Close()
 		//logger.ERROR("Sql exec failed, error: %v", err.Error())
 		return SqlExecErrorResult(-1), errors.New(fmt.Sprintf("sql exec failed, error: %v", err.Error()))
 	}
-	// 提交事务
-	tx.Commit()
 	return res, nil
 }
 
